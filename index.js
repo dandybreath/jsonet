@@ -25,3 +25,8 @@ var server = require('./lib/server');
 
 exports.Server = server.Server;
 exports.createServer = server.create;
+
+var socket = require('./lib/socket');
+
+exports.Socket = socket.Socket;
+exports.createSocket = socket.create;
