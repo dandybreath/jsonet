@@ -1,0 +1,31 @@
+{
+    "name": "jsonet",
+	"description": "JavaScript Object Network messaging server/client",
+	"version": "0.0.1",
+	"license": "MIT",
+	"author": "Sal Gerace",
+	"keywords": [ 
+		"json",
+		"net",
+		"tcp",
+		"server",
+		"client"
+	],
+	"repository": "git://github.com/sgerace/jsonet.git",
+	"engines": {
+		"node": ">= 0.8.0"
+	},
+	"dependencies": {
+	},
+	"devDependencies": {
+		"chai": "1.9.1",
+		"coveralls": "2.3.0",
+		"istanbul": "0.2.7",
+		"mocha": "1.18.2"
+	},
+	"scripts": {
+		"prepublish": "npm prune",
+		"test": "mocha --recursive --reporter spec",
+		"cover": "istanbul cover node_modules/mocha/bin/_mocha -- --recursive --reporter spec"
+	}
+}
