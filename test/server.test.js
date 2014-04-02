@@ -40,6 +40,8 @@ describe('Server', function () {
 
             var server2 = jsonet.createServer();
             expect(server2).to.be.an.instanceof(jsonet.Server);
+
+            expect(server2).to.be.an.instanceof(Array);
         });
 
     });
