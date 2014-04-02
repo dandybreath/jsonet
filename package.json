@@ -27,6 +27,6 @@
 		"prepublish": "npm prune",
 		"test": "mocha --recursive --reporter spec",
 		"cover": "istanbul cover ./node_modules/mocha/bin/_mocha -- --recursive --reporter spec",
-		"ci": "istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- --recursive --reporter spec && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js"
+		"ci": "mocha --recursive --reporter spec && istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- --recursive --reporter spec && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js"
 	}
 }
