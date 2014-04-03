@@ -1,9 +1,9 @@
 {
     "name": "jsonet",
-	"description": "JavaScript Object Network messaging server/client",
-	"version": "0.0.1",
+	"description": "JavaScript Object Networking library for passing JSON messages between a server and client.",
+	"version": "1.0.0",
 	"license": "MIT",
-	"author": "Sal Gerace",
+	"author": "Sal Gerace <sgerace@gmail.com>",
 	"keywords": [ 
 		"json",
 		"net",
@@ -11,7 +11,8 @@
 		"server",
 		"client"
 	],
-	"repository": "git://github.com/sgerace/jsonet.git",
+	"homepage": "https://github.com/dotdecimal/jsonet",
+	"repository": "git://github.com/dotdecimal/jsonet.git",
 	"engines": {
 		"node": ">= 0.8.0"
 	},
