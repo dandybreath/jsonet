@@ -292,43 +292,9 @@ describe('Socket', function () {
                         clientSocket.write(message1);
                         count++;
                     } else {
-                        server.close();
-                        done();
+                        clientSocket.end();
                     }
-                });
-                clientSocket.connect(PORT, function () {
-                    clientSocket.write(message1);
-                });
-            });
-        });
-
-        it('should handle two-way communication of large datasets', function (done) {
-            this.timeout(10000);
-            var message1 = {
-                foo: 'bar1',
-                baz: 'boo1',
-                items: []
-            };
-            var message2 = {
-                foo: 'bar2',
-                baz: 'boo2',
-                items: []
-            };
-            var count = 10000;
-            for (var i = 0; i < count; ++i) {
-                message1.items.push('K49RdQqWlaIWmHe7ZFmt9DnojYftdgIDj1jKs2G2-' + i.toString());
-                message2.items.push('BYTcTHxT65Qmic5ap7exuEfL0mUCdyODd4hW91Nh-' + (count - i).toString());
-            }
-            var server = jsonet.createServer(function (serverSocket) {
-                serverSocket.on('message', function (message) {
-                    expect(message).to.deep.equal(message1);
-                    serverSocket.write(message2);
-                });
-            });
-            var clientSocket;
-            server.listen(PORT, function () {
-                clientSocket = jsonet.createSocket().on('message', function (message) {
-                    expect(message).to.deep.equal(message2);
+                }).on('end', function () {
                     server.close();
                     done();
                 });
@@ -338,133 +304,169 @@ describe('Socket', function () {
             });
         });
 
-        it('should handle rapid two-way communication of large datasets', function (done) {
-            this.timeout(10000);
-            var message1 = {
-                foo: 'bar1',
-                baz: 'boo1',
-                items: []
-            };
-            var message2 = {
-                foo: 'bar2',
-                baz: 'boo2',
-                items: []
-            };
-            var count = 10000;
-            for (var i = 0; i < count; ++i) {
-                message1.items.push('K49RdQqWlaIWmHe7ZFmt9DnojYftdgIDj1jKs2G2-' + i.toString());
-                message2.items.push('BYTcTHxT65Qmic5ap7exuEfL0mUCdyODd4hW91Nh-' + (count - i).toString());
-            }
-            var server = jsonet.createServer(function (serverSocket) {
-                serverSocket.on('message', function (message) {
-                    expect(message).to.deep.equal(message1);
-                    serverSocket.write(message2);
-                });
-            });
-            var clientSocket;
-            server.listen(PORT, function () {
-                var count = 0;
-                clientSocket = jsonet.createSocket().on('message', function (message) {
-                    if (count < 100) {
-                        expect(message).to.deep.equal(message2);
-                        clientSocket.write(message1);
-                        count++;
-                    } else {
-                        server.close();
-                        done();
-                    }
-                });
-                clientSocket.connect(PORT, function () {
-                    clientSocket.write(message1);
-                });
-            });
-        });
+        // it('should handle two-way communication of large datasets', function (done) {
+        //     this.timeout(10000);
+        //     var message1 = {
+        //         foo: 'bar1',
+        //         baz: 'boo1',
+        //         items: []
+        //     };
+        //     var message2 = {
+        //         foo: 'bar2',
+        //         baz: 'boo2',
+        //         items: []
+        //     };
+        //     var count = 10000;
+        //     for (var i = 0; i < count; ++i) {
+        //         message1.items.push('K49RdQqWlaIWmHe7ZFmt9DnojYftdgIDj1jKs2G2-' + i.toString());
+        //         message2.items.push('BYTcTHxT65Qmic5ap7exuEfL0mUCdyODd4hW91Nh-' + (count - i).toString());
+        //     }
+        //     var server = jsonet.createServer(function (serverSocket) {
+        //         serverSocket.on('message', function (message) {
+        //             expect(message).to.deep.equal(message1);
+        //             serverSocket.write(message2);
+        //         });
+        //     });
+        //     var clientSocket;
+        //     server.listen(PORT, function () {
+        //         clientSocket = jsonet.createSocket().on('message', function (message) {
+        //             expect(message).to.deep.equal(message2);
+        //             server.close();
+        //             done();
+        //         });
+        //         clientSocket.connect(PORT, function () {
+        //             clientSocket.write(message1);
+        //         });
+        //     });
+        // });
+
+        // it('should handle rapid two-way communication of large datasets', function (done) {
+        //     this.timeout(10000);
+        //     var message1 = {
+        //         foo: 'bar1',
+        //         baz: 'boo1',
+        //         items: []
+        //     };
+        //     var message2 = {
+        //         foo: 'bar2',
+        //         baz: 'boo2',
+        //         items: []
+        //     };
+        //     var count = 10000;
+        //     for (var i = 0; i < count; ++i) {
+        //         message1.items.push('K49RdQqWlaIWmHe7ZFmt9DnojYftdgIDj1jKs2G2-' + i.toString());
+        //         message2.items.push('BYTcTHxT65Qmic5ap7exuEfL0mUCdyODd4hW91Nh-' + (count - i).toString());
+        //     }
+        //     var server = jsonet.createServer(function (serverSocket) {
+        //         serverSocket.on('message', function (message) {
+        //             expect(message).to.deep.equal(message1);
+        //             serverSocket.write(message2);
+        //         });
+        //     });
+        //     var clientSocket;
+        //     server.listen(PORT, function () {
+        //         var count = 0;
+        //         clientSocket = jsonet.createSocket().on('message', function (message) {
+        //             if (count < 100) {
+        //                 expect(message).to.deep.equal(message2);
+        //                 clientSocket.write(message1);
+        //                 count++;
+        //             } else {
+        //                 server.close();
+        //                 done();
+        //             }
+        //         });
+        //         clientSocket.connect(PORT, function () {
+        //             clientSocket.write(message1);
+        //         });
+        //     });
+        // });
 
     });
 
-    describe('Event #close', function () {
+    // describe('Event #close', function () {
 
-        it('should emit close event from tcp socket', function (done) {
-            var server = jsonet.createServer();
-            var socket;
-            server.listen(PORT, function () {
-                socket = jsonet.createSocket().on('end', function () {
-                    server.close();
-                }).on('close', function () {
-                    done();
-                });
-                socket.connect(PORT, function () {
-                    socket.end();
-                });
-            });
-        });
+    //     it('should emit close event from tcp socket', function (done) {
+    //         var server = jsonet.createServer();
+    //         var socket;
+    //         server.listen(PORT, function () {
+    //             socket = jsonet.createSocket().on('end', function () {
+    //                 server.close();
+    //             }).on('close', function () {
+    //                 done();
+    //             });
+    //             socket.connect(PORT, function () {
+    //                 socket.end();
+    //             });
+    //         });
+    //     });
 
-    });
+    // });
 
-    describe('Event #error', function () {
+    // describe('Event #error', function () {
 
-        it('should emit SyntaxError if bad json is received', function (done) {
-            var server = jsonet.createServer(function (serverSocket) {
-                expect(serverSocket).to.be.an.instanceof(jsonet.Socket);
-                expect(serverSocket.remoteAddress).to.be.equal('127.0.0.1');
+    //     it('should emit SyntaxError if bad json is received', function (done) {
+    //         var server = jsonet.createServer(function (serverSocket) {
+    //             expect(serverSocket).to.be.an.instanceof(jsonet.Socket);
+    //             expect(serverSocket.remoteAddress).to.be.equal('127.0.0.1');
 
-                serverSocket.on('message', function (message) {
-                    server.close();
-                    done(new Error("Should not receive message"));
-                });
+    //             serverSocket.on('message', function (message) {
+    //                 server.close();
+    //                 done(new Error("Should not receive message"));
+    //             });
 
-                serverSocket.on('error', function (err) {
-                    expect(err).to.be.an.instanceof(SyntaxError);
-                    server.close();
-                    done();
-                });
-            });
-            var connection;
-            server.listen(PORT, function () {
-                connection = net.connect(PORT, function () {
-                    var message = '{ "foo": "bar", "baz": sdf }';
-                    var length = Buffer.byteLength(message);
-                    var header = new Buffer(8);
-                    header.writeUInt32BE(174021652, 0);
-                    header.writeUInt32BE(length, 4);
-                    connection.write(header);
-                    connection.write(message);
-                });
-            });
-        });
+    //             serverSocket.on('error', function (err) {
+    //                 expect(err).to.be.an.instanceof(SyntaxError);
+    //                 server.close();
+    //                 done();
+    //             });
+    //         });
+    //         var connection;
+    //         server.listen(PORT, function () {
+    //             connection = net.connect(PORT, function () {
+    //                 var message = '{ "foo": "bar", "baz": sdf }';
+    //                 var length = Buffer.byteLength(message);
+    //                 var header = new Buffer(8);
+    //                 header.writeUInt32BE(174021652, 0);
+    //                 header.writeUInt32BE(length, 4);
+    //                 connection.write(header);
+    //                 connection.write(message);
+    //             });
+    //         });
+    //     });
 
-        it('should emit Error if bad signature is received', function (done) {
-            var server = jsonet.createServer(function (serverSocket) {
-                expect(serverSocket).to.be.an.instanceof(jsonet.Socket);
-                expect(serverSocket.remoteAddress).to.be.equal('127.0.0.1');
+    //     it('should emit Error if bad signature is received', function (done) {
+    //         var server = jsonet.createServer(function (serverSocket) {
+    //             expect(serverSocket).to.be.an.instanceof(jsonet.Socket);
+    //             expect(serverSocket.remoteAddress).to.be.equal('127.0.0.1');
 
-                serverSocket.on('message', function (message) {
-                    server.close();
-                    done(new Error("Should not receive message"));
-                });
+    //             serverSocket.on('message', function (message) {
+    //                 server.close();
+    //                 done(new Error("Should not receive message"));
+    //             });
 
-                serverSocket.on('error', function (err) {
-                    expect(err).to.be.an.instanceof(Error);
-                    server.close();
-                    done();
-                });
-            });
-            var connection;
-            server.listen(PORT, function () {
-                connection = net.connect(PORT, function () {
-                    var message = JSON.stringify({
-                        foo: 'bar'
-                    });
-                    var length = Buffer.byteLength(message);
-                    var header = new Buffer(8);
-                    header.writeUInt32BE(174021651, 0);
-                    header.writeUInt32BE(length, 4);
-                    connection.write(header);
-                    connection.write(message);
-                });
-            });
-        });
+    //             serverSocket.on('error', function (err) {
+    //                 expect(err).to.be.an.instanceof(Error);
+    //                 server.close();
+    //                 done();
+    //             });
+    //         });
+    //         var connection;
+    //         server.listen(PORT, function () {
+    //             connection = net.connect(PORT, function () {
+    //                 var message = JSON.stringify({
+    //                     foo: 'bar'
+    //                 });
+    //                 var length = Buffer.byteLength(message);
+    //                 var header = new Buffer(8);
+    //                 header.writeUInt32BE(174021651, 0);
+    //                 header.writeUInt32BE(length, 4);
+    //                 connection.write(header);
+    //                 connection.write(message);
+    //             });
+    //         });
+    //     });
 
-    });
+    // });
 
 });
