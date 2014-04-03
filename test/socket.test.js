@@ -266,6 +266,7 @@ describe('Socket', function () {
         });
 
         it('should handle rapid two-way communication of small datasets', function (done) {
+            this.timeout(20000);
             var message1 = {
                 foo: 'bar'
             };
