@@ -67,12 +67,14 @@ describe('Socket', function () {
             var server = jsonet.createServer();
             var socket;
             server.listen(PORT, function () {
-                socket = jsonet.createSocket();
+                socket = jsonet.createSocket().on('end', function () {
+                    server.close();
+                    done();  
+                });
                 socket.connect(PORT, function () {
                     expect(socket.remoteAddress).to.be.equal('127.0.0.1');
                     expect(socket.remotePort).to.be.equal(PORT);
-                    server.close();
-                    done();
+                    socket.end();
                 });
             });
         });
@@ -110,7 +112,7 @@ describe('Socket', function () {
 
     describe('#write()', function () {
 
-        it('should connect properly to server', function (done) {
+        it('should write to server', function (done) {
             var server = jsonet.createServer(function (serverSocket) {
                 expect(serverSocket).to.be.an.instanceof(jsonet.Socket);
                 expect(serverSocket.remoteAddress).to.be.equal('127.0.0.1');
@@ -382,29 +384,17 @@ describe('Socket', function () {
 
     describe('Event #close', function () {
 
-        it('should connect properly to server', function (done) {
-            var server = jsonet.createServer();
-            var socket;
-            server.listen(PORT, function () {
-                socket = jsonet.createSocket();
-                socket.connect(PORT, function () {
-                    expect(socket.remoteAddress).to.be.equal('127.0.0.1');
-                    expect(socket.remotePort).to.be.equal(PORT);
-                    server.close();
-                    done();
-                });
-            });
-        });
-
         it('should emit close event from tcp socket', function (done) {
             var server = jsonet.createServer();
             var socket;
             server.listen(PORT, function () {
-                socket = jsonet.createSocket().on('close', function () {
+                socket = jsonet.createSocket().on('end', function () {
+                    server.close();
+                }).on('close', function () {
                     done();
                 });
                 socket.connect(PORT, function () {
-                    server.close();
+                    socket.end();
                 });
             });
         });
