@@ -16,6 +16,7 @@ You "write" JSON objects to the socket, and the "message" events on the other en
 ## Example
 
 ``` javascript
+// server side code
 var port = 8212;
 
 // Create server
@@ -31,21 +32,25 @@ var server = jsonet.createServer(function (socket) {
 });
 
 // Listen to port
-server.listen(port, function () {
+server.listen(port);
+```
 
-	// Connect to server with new client socket
-	var client = jsonet.createSocket();
-	
-	// Write messages received by client to console
-	client.on('message', function (message) {
-		console.log(message);
-	});
-	
-	// Connect and write message to server
-	client.connect(port, function () {
-		client.write({
-			foo: 'bar'
-		});
+```
+// client side code
+var port = 8212;
+
+// Connect to server with new client socket
+var client = jsonet.createSocket();
+
+// Write messages received by client to console
+client.on('message', function (message) {
+	console.log(message);
+});
+
+// Connect and write message to server
+client.connect(port, function () {
+	client.write({
+		foo: 'bar'
 	});
 });
 ```
